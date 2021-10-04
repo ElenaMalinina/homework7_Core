@@ -1,12 +1,16 @@
 package lesson7;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lesson7.entity.Weather;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
 import static java.lang.Math.round;
 
 public class AccuweatherModel implements WeatherModel {
@@ -25,9 +29,10 @@ public class AccuweatherModel implements WeatherModel {
     private static final String AUTOCOMPLETE = "autocomplete";
     private static final OkHttpClient okHttpClient = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final DataBaseRepository dataBaseRepository = new DataBaseRepository();
 
     @Override
-    public void getWeather(String city, Period period) throws IOException {
+    public void getWeather(String city, Period period) throws IOException, SQLException {
         //http://dataservice.accuweather.com/forecasts/v1/daily/5day/288968
         switch (period) {
             case NOW: {
@@ -57,6 +62,7 @@ public class AccuweatherModel implements WeatherModel {
                 temperature = round((temperature - 32.0) * 5 / 9.0 * 100.0) / 100.0;
                 System.out.println("В " + city + " " + localDate.split("T")[0] + " температатура воздуха " + temperature + " C");
                 //System.out.println(weatherResponse);
+
         }
                 break;
 
@@ -99,7 +105,27 @@ public class AccuweatherModel implements WeatherModel {
 
         }
 
+    @Override
+    public List<Weather> getSavedToDB() {
+        return dataBaseRepository.getSavedToDBList();
+    }
 
+
+//    @Override
+//    public boolean saveWeather(Weather weather) throws SQLException {
+//
+//        return dataBaseRepository.saveWeather(weather);
+//    }
+
+
+
+    public void saveWeather(List<Weather> weatherList) {
+        dataBaseRepository.saveWeather(weatherList);
+    }
+
+    public List<Weather> getSavedToDBList() {
+        return dataBaseRepository.getSavedToDBList();
+    }
 
     private String detectCityKey(String city) throws IOException {
         //http://dataservice.accuweather.com/locations/v1/cities/autocomplete

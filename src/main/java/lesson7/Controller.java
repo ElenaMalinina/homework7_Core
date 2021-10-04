@@ -1,6 +1,7 @@
 package lesson7;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,8 +11,9 @@ public class Controller {
     public Controller() {
         variants.put(1, Period.NOW);
         variants.put(5, Period.FIVE_DAYS);
+        variants.put(3, Period.DB);
     }
-    public void getWeather (String userInput, String selectedCity) throws IOException {
+    public void getWeather (String userInput, String selectedCity) throws IOException, SQLException {
         Integer option = Integer.parseInt(userInput);
         switch (variants.get(option)) {
             case NOW:
@@ -20,7 +22,9 @@ public class Controller {
             case FIVE_DAYS:
                 weatherModel.getWeather(selectedCity, Period.FIVE_DAYS);
                 break;
-
+            case DB:
+                weatherModel.getSavedToDB();
+                break;
         }
     }
 }
