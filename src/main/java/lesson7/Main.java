@@ -7,9 +7,13 @@ package lesson7;
 //
 //где CITY, DATE, WEATHER_TEXT и TEMPERATURE - уникальные значения для каждого дня.
 
+import java.sql.SQLException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         UserInterfaceView userInterfaceView = new UserInterfaceView();
         userInterfaceView.runInterface();
+        DataBaseRepository dataBaseRepository = new DataBaseRepository();
+        System.out.println(dataBaseRepository.getSavedToDB());
     }
 }
